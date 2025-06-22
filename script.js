@@ -272,6 +272,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 返回顶部按钮
     initBackToTop();
+    
+    // 初始化笔记编辑器
+    initNotesEditor();
 });
 
 // 初始化页面
@@ -869,4 +872,281 @@ style.textContent = `
         transition: opacity 0.3s ease;
     }
 `;
-document.head.appendChild(style); 
+document.head.appendChild(style);
+
+// 笔记编辑器功能
+function initNotesEditor() {
+    const noteContent = document.getElementById('noteContent');
+    const notePreview = document.getElementById('notePreview');
+    const saveNoteBtn = document.getElementById('saveNote');
+    const exportNoteBtn = document.getElementById('exportNote');
+    const clearNoteBtn = document.getElementById('clearNote');
+    const noteTitle = document.getElementById('noteTitle');
+    const noteCategory = document.getElementById('noteCategory');
+    
+    // 实时Markdown预览
+    if (noteContent && notePreview) {
+        noteContent.addEventListener('input', function() {
+            const markdown = this.value;
+            const html = convertMarkdownToHtml(markdown);
+            notePreview.innerHTML = html;
+        });
+    }
+    
+    // 保存笔记
+    if (saveNoteBtn) {
+        saveNoteBtn.addEventListener('click', function() {
+            saveNote();
+        });
+    }
+    
+    // 导出PDF
+    if (exportNoteBtn) {
+        exportNoteBtn.addEventListener('click', function() {
+            exportToPDF();
+        });
+    }
+    
+    // 清空编辑器
+    if (clearNoteBtn) {
+        clearNoteBtn.addEventListener('click', function() {
+            if (confirm('确定要清空当前笔记吗？')) {
+                noteContent.value = '';
+                noteTitle.value = '';
+                notePreview.innerHTML = '';
+            }
+        });
+    }
+    
+    // 加载已保存的笔记
+    loadSavedNotes();
+}
+
+// Markdown转HTML
+function convertMarkdownToHtml(markdown) {
+    // 简单的Markdown解析
+    let html = markdown
+        // 标题
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        // 粗体和斜体
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        // 代码块
+        .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/`(.*?)`/g, '<code>$1</code>')
+        // 链接
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+        // 列表
+        .replace(/^\* (.*$)/gim, '<li>$1</li>')
+        .replace(/^- (.*$)/gim, '<li>$1</li>')
+        // 段落
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/^(?!<[h|li|pre|ul|ol])(.*$)/gim, '<p>$1</p>');
+    
+    // 处理列表
+    html = html.replace(/<li>.*?<\/li>/g, function(match) {
+        return '<ul>' + match + '</ul>';
+    });
+    
+    return html;
+}
+
+// 保存笔记到本地存储
+function saveNote() {
+    const title = document.getElementById('noteTitle').value.trim();
+    const content = document.getElementById('noteContent').value.trim();
+    const category = document.getElementById('noteCategory').value;
+    
+    if (!title || !content) {
+        showNotification('请填写笔记标题和内容', 'error');
+        return;
+    }
+    
+    const note = {
+        id: Date.now(),
+        title: title,
+        content: content,
+        category: category,
+        date: new Date().toLocaleString('zh-CN'),
+        preview: content.substring(0, 100) + (content.length > 100 ? '...' : '')
+    };
+    
+    // 获取已保存的笔记
+    let savedNotes = JSON.parse(localStorage.getItem('savedNotes') || '[]');
+    
+    // 检查是否已存在同名笔记
+    const existingIndex = savedNotes.findIndex(n => n.title === title);
+    if (existingIndex !== -1) {
+        savedNotes[existingIndex] = note;
+    } else {
+        savedNotes.push(note);
+    }
+    
+    // 保存到本地存储
+    localStorage.setItem('savedNotes', JSON.stringify(savedNotes));
+    
+    showNotification('笔记保存成功！', 'success');
+    loadSavedNotes();
+}
+
+// 加载已保存的笔记
+function loadSavedNotes() {
+    const notesList = document.getElementById('notesList');
+    if (!notesList) return;
+    
+    const savedNotes = JSON.parse(localStorage.getItem('savedNotes') || '[]');
+    
+    if (savedNotes.length === 0) {
+        notesList.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">还没有保存的笔记</p>';
+        return;
+    }
+    
+    notesList.innerHTML = savedNotes.map(note => `
+        <div class="note-item" onclick="loadNote(${note.id})">
+            <h5>${note.title}</h5>
+            <span class="note-category">${note.category}</span>
+            <div class="note-date">${note.date}</div>
+            <div class="note-preview">${note.preview}</div>
+        </div>
+    `).join('');
+}
+
+// 加载笔记到编辑器
+function loadNote(noteId) {
+    const savedNotes = JSON.parse(localStorage.getItem('savedNotes') || '[]');
+    const note = savedNotes.find(n => n.id === noteId);
+    
+    if (note) {
+        document.getElementById('noteTitle').value = note.title;
+        document.getElementById('noteContent').value = note.content;
+        document.getElementById('noteCategory').value = note.category;
+        
+        // 更新预览
+        const html = convertMarkdownToHtml(note.content);
+        document.getElementById('notePreview').innerHTML = html;
+        
+        showNotification('笔记加载成功！', 'success');
+    }
+}
+
+// 导出PDF
+function exportToPDF() {
+    const title = document.getElementById('noteTitle').value.trim();
+    const content = document.getElementById('noteContent').value.trim();
+    
+    if (!title || !content) {
+        showNotification('请先填写笔记内容', 'error');
+        return;
+    }
+    
+    // 创建打印窗口
+    const printWindow = window.open('', '_blank');
+    const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${title}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 2rem; }
+                h1 { color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 0.5rem; }
+                h2 { color: #374151; margin-top: 2rem; }
+                h3 { color: #4b5563; }
+                p { line-height: 1.6; color: #374151; }
+                code { background: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 4px; }
+                pre { background: #1f2937; color: #f9fafb; padding: 1rem; border-radius: 6px; overflow-x: auto; }
+                pre code { background: none; color: inherit; padding: 0; }
+                ul, ol { padding-left: 1.5rem; }
+                li { margin-bottom: 0.25rem; }
+                @media print { body { margin: 1rem; } }
+            </style>
+        </head>
+        <body>
+            <h1>${title}</h1>
+            ${convertMarkdownToHtml(content)}
+        </body>
+        </html>
+    `;
+    
+    printWindow.document.write(html);
+    printWindow.document.close();
+    
+    // 等待内容加载完成后打印
+    printWindow.onload = function() {
+        printWindow.print();
+    };
+}
+
+// OneNote集成功能
+function openOneNote() {
+    // 尝试打开OneNote应用
+    try {
+        window.open('onenote://', '_blank');
+    } catch (e) {
+        // 如果无法打开应用，则打开网页版
+        window.open('https://www.onenote.com/notebooks', '_blank');
+    }
+}
+
+function syncToOneNote() {
+    const title = document.getElementById('noteTitle').value.trim();
+    const content = document.getElementById('noteContent').value.trim();
+    
+    if (!title || !content) {
+        showNotification('请先填写笔记内容', 'error');
+        return;
+    }
+    
+    // 创建OneNote链接
+    const onenoteUrl = `onenote:///C:/Users/${encodeURIComponent(title)}/${encodeURIComponent(content)}`;
+    
+    try {
+        window.open(onenoteUrl, '_blank');
+        showNotification('正在打开OneNote...', 'success');
+    } catch (e) {
+        showNotification('无法打开OneNote，请手动复制内容', 'error');
+        // 复制内容到剪贴板
+        copyToClipboard(content);
+    }
+}
+
+function importFromOneNote() {
+    showNotification('请从OneNote复制内容，然后粘贴到编辑器中', 'info');
+    // 聚焦到编辑器
+    document.getElementById('noteContent').focus();
+}
+
+// 复制到剪贴板
+function copyToClipboard(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+            showNotification('内容已复制到剪贴板', 'success');
+        });
+    } else {
+        // 备用方法
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showNotification('内容已复制到剪贴板', 'success');
+    }
+}
+
+// 打开笔记编辑器并设置分类
+function openNoteEditor(category) {
+    // 滚动到编辑器
+    document.querySelector('.notes-editor-section').scrollIntoView({ 
+        behavior: 'smooth' 
+    });
+    
+    // 设置分类
+    document.getElementById('noteCategory').value = category;
+    
+    // 聚焦到标题输入框
+    document.getElementById('noteTitle').focus();
+    
+    showNotification(`已切换到${category}分类`, 'success');
+} 
