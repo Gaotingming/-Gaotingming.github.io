@@ -106,8 +106,14 @@ body {
 
 .hero-subtitle {
     font-size: 1.2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     opacity: 0.9;
+}
+
+.hero-description {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    opacity: 0.8;
 }
 
 .hero-buttons {
@@ -276,93 +282,35 @@ body {
     color: white;
 }
 
-/* 学习笔记部分 */
-.notes {
-    padding: 5rem 0;
-}
-
-.notes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.note-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    border: 1px solid #e5e7eb;
-}
-
-.note-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.note-icon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
-
-.note-icon i {
+.profile-card h3 {
     font-size: 1.5rem;
-    color: white;
-}
-
-.note-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: #1f2937;
 }
 
-.note-card p {
+.profile-card p {
     color: #6b7280;
-    margin-bottom: 1rem;
-    line-height: 1.6;
+    margin-bottom: 0.5rem;
 }
 
-.note-tags {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
+.contact-info {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
 }
 
-.tag {
-    background: #e0e7ff;
-    color: #3730a3;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.note-link {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 600;
+.contact-info p {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    transition: color 0.3s ease;
-}
-
-.note-link:hover {
-    color: #1d4ed8;
+    color: #2563eb;
+    font-size: 0.9rem;
 }
 
 /* 论文发表部分 */
 .papers {
     padding: 5rem 0;
-    background: #f8fafc;
 }
 
 .papers-list {
@@ -399,8 +347,14 @@ body {
 
 .paper-authors {
     color: #6b7280;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     font-style: italic;
+}
+
+.paper-journal {
+    color: #10b981;
+    margin-bottom: 1rem;
+    font-weight: 500;
 }
 
 .paper-abstract {
@@ -428,90 +382,311 @@ body {
     color: #1d4ed8;
 }
 
-/* 学习资源部分 */
-.resources {
+/* 课程资料部分 */
+.courses {
     padding: 5rem 0;
+    background: #f8fafc;
 }
 
-.resources-grid {
+.courses-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 2rem;
 }
 
-.resource-card {
+.course-card {
     background: white;
     padding: 2rem;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
     transition: all 0.3s ease;
     border: 1px solid #e5e7eb;
 }
 
-.resource-card:hover {
+.course-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-.resource-icon {
-    width: 80px;
-    height: 80px;
+.course-icon {
+    width: 60px;
+    height: 60px;
     background: linear-gradient(135deg, #10b981, #059669);
-    border-radius: 50%;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem;
+    margin-bottom: 1rem;
 }
 
-.resource-icon i {
-    font-size: 2rem;
+.course-icon i {
+    font-size: 1.5rem;
     color: white;
 }
 
-.resource-card h3 {
+.course-card h3 {
     font-size: 1.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: #1f2937;
 }
 
-.resource-card p {
+.course-instructor {
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.course-semester {
+    color: #10b981;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.course-description {
     color: #6b7280;
     margin-bottom: 1.5rem;
     line-height: 1.6;
 }
 
-.resource-list {
+.course-card h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+
+.course-notes {
     list-style: none;
     margin-bottom: 1.5rem;
-    text-align: left;
 }
 
-.resource-list li {
-    padding: 0.5rem 0;
+.course-notes li {
+    padding: 0.25rem 0;
     color: #6b7280;
-    border-bottom: 1px solid #f3f4f6;
+    position: relative;
+    padding-left: 1rem;
 }
 
-.resource-list li:last-child {
-    border-bottom: none;
+.course-notes li:before {
+    content: "•";
+    color: #10b981;
+    position: absolute;
+    left: 0;
 }
 
-.resource-link {
-    background: #10b981;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+.course-materials {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.material-link {
+    color: #10b981;
     text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    display: inline-block;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    font-size: 0.9rem;
 }
 
-.resource-link:hover {
-    background: #059669;
-    transform: translateY(-2px);
+.material-link:hover {
+    color: #059669;
+}
+
+/* 组会记录部分 */
+.seminars {
+    padding: 5rem 0;
+}
+
+.seminars-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.seminar-item {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+}
+
+.seminar-header {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+}
+
+.seminar-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.seminar-icon i {
+    font-size: 1.25rem;
+    color: white;
+}
+
+.seminar-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+
+.seminar-date {
+    color: #f59e0b;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.seminar-topic {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.seminar-content {
+    padding-left: 3.5rem;
+}
+
+.seminar-description {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.seminar-presenter {
+    color: #1f2937;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.seminar-notes {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.seminar-materials {
+    display: flex;
+    gap: 1rem;
+}
+
+/* IDEA想法部分 */
+.ideas {
+    padding: 5rem 0;
+    background: #f8fafc;
+}
+
+.ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.idea-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.idea-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.idea-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.idea-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.idea-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+
+.idea-category {
+    color: #8b5cf6;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.idea-description {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.idea-status {
+    margin-bottom: 1rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+}
+
+.status-conception {
+    background: #f59e0b;
+}
+
+.status-research {
+    background: #3b82f6;
+}
+
+.status-theory {
+    background: #10b981;
+}
+
+.idea-keywords {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.keyword {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.idea-notes {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
 /* 联系我部分 */
@@ -650,6 +825,23 @@ body {
 
     .paper-year {
         align-self: flex-start;
+    }
+
+    .courses-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ideas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .seminar-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .seminar-content {
+        padding-left: 0;
     }
 }
 
